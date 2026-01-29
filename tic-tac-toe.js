@@ -2,19 +2,21 @@
 
 const gameBoard = (function() {
     const grid = [
-        ['', '', ''],
-        ['', '', ''],
-        ['', '', '']
+        [' ', ' ', ' '],
+        [' ', ' ', ' '],
+        [' ', ' ', ' ']
     ];
 
     const getGrid = () => grid.map(row => [...row]);
     const setGrid = (symbol, row, col) => { 
-        if (grid[row][col] === '') grid[row][col] = symbol; 
+        if (grid[row][col] === ' ') {
+            grid[row][col] = symbol; 
+        }
     };
     const resetGrid = () => {
         grid.forEach((row, rIndex) => {
             row.forEach((_, cIndex) => {
-                grid[rIndex][cIndex] = '';
+                grid[rIndex][cIndex] = ' ';
             });
         });
     };
@@ -37,8 +39,33 @@ function createGame(player1Name, player2Name) {
         return Math.floor(Math.random() * 2);
     }
 
-    function playRound() {
+    // print the grid for debugging purposes
+    function printGrid(currGrid) {
+        console.log(currGrid[0][0], "|", currGrid[0][1], "|", currGrid[0][2]);
+        console.log("----------");
+        console.log(currGrid[1][0], "|", currGrid[1][1], "|", currGrid[1][2]);
+        console.log("----------");
+        console.log(currGrid[2][0], "|", currGrid[2][1], "|", currGrid[2][2]);
+    }
 
+    function playRound(player) {
+        printGrid(gameBoard.getGrid());
+        console.log("Your turn", player.name);
+        while (true) {
+            let chosenRow = Number(prompt("Choose row"));
+            let chosenCol = Number(prompt("Choose col"));
+            if (!Number.isInteger(chosenRow) || !Number.isInteger(chosenCol) ||
+                chosenRow < 0 || chosenRow > 2 || chosenCol < 0 || chosenCol > 2) {
+                    console.log("Please choose an integer for row and column (0 - 2 inclusive)");
+            }
+            else {
+                if (gameBoard.getGrid()[chosenRow][chosenCol] === ' ') {
+                    gameBoard.setGrid(player.symbol, chosenRow, chosenCol);
+                    break;
+                }
+                console.log("Oops! Please choose another cell");
+            }
+        }
     }
 
     function findWinner(player1, player2) {
@@ -85,17 +112,27 @@ function createGame(player1Name, player2Name) {
 
     function playGame(player1, player2, playerTurn) {
         let winningPlayer = null;
+        console.log("Welcome to TIC TAC TOE let's play!");
         do {
-            playRound();
+            playRound(playerTurn);
+            playerTurn = (playerTurn === player1 ? player2 : player1);
             winningPlayer = findWinner(player1, player2);
-        } while (!winningPlayer)
+        } while (!winningPlayer && gameBoard.getGrid().findIndex(row => row.includes(' ')) !== -1)
+        printGrid(gameBoard.getGrid());
+
+        if (winningPlayer === player1)
+            console.log("CONGRATS", player1.name, "YOU WON!");
+        else if (winningPlayer === player2)
+            console.log("CONGRATS", player2.name, "YOU WON!");
+        else 
+            console.log("It's a tie. Good game :)");
     }
 
     const player1 = createPlayer(player1Name, 'O');
     const player2 = createPlayer(player2Name, 'X');
-    let playerTurn = chooseStartingPlayer() === 0 ? player1 : player2;
+    let playerTurn = (chooseStartingPlayer() === 0 ? player1 : player2);
 
     playGame(player1, player2, playerTurn);
 }
 
-
+createGame("Jerry", "Stewart");
