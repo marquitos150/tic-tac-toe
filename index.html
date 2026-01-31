@@ -9,15 +9,58 @@
 <body>
     <header>Tic Tac Toe</header>
     <main>
-        <section class="options">
-
-        </section>
-        <section class="game-board">
-
-        </section>
-        <section class="chat-log-window">
-
-        </section>
+        <div class="score-board">
+            <div class="left-side">
+                <!--
+                <svg class="neon-O" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="40" />
+                </svg>
+                -->
+                <p id="player1" class="player-name"></p>
+                <p id="left-score" class="left-score"></p>
+            </div>
+            <div class="ties">
+                <p id="ties-score" class="ties-score">Ties: </p>
+            </div>
+            <div class="right-side">
+                <p id="right-score" class="right-score"></p>
+                <p id="player2" class="player-name"></p>
+                <!--
+                <svg class="neon-X" viewBox="0 0 100 100">
+                    <line x1="10" y1="10" x2="90" y2="90" /> 
+                    <line x1="90" y1="10" x2="10" y2="90" />
+                </svg>
+                -->
+            </div>
+        </div>
+        <div class="game-content">
+            <div class="game-board">
+                <button id="cell00" class="cell"></button>
+                <button id="cell01" class="cell"></button>
+                <button id="cell02" class="cell"></button>
+                <button id="cell10" class="cell"></button>
+                <button id="cell11" class="cell"></button>
+                <button id="cell12" class="cell"></button>
+                <button id="cell20" class="cell"></button>
+                <button id="cell21" class="cell"></button>
+                <button id="cell22" class="cell"></button>
+            </div>
+            <div class="game-window">
+                <div class="game-menu active">
+                    <h1>Game Menu</h1>
+                    <form>
+                        <label for="player1-name">Player 1 Name:</label>
+                        <input type="text" id="player1-name" name="player1-name">
+                        <label for="player2-name">Player 2 Name:</label>
+                        <input type="text" id="player2-name" name="player2-name">
+                        <button type="submit">PLAY</button>
+                    </form>
+                </div>
+                <div class="interactive-logs">
+                    <!-- Dynamically add logs and interactive elements based on user actions -->
+                </div>
+            </div>
+        </div>
     </main>
     <footer>
         Copyright © Marcos Vazquez 2025
