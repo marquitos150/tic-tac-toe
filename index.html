@@ -5,32 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TicTacToe</title>
     <link rel="stylesheet" href="styles.css">
+    <link href='http://fonts.googleapis.com/css?family=Roboto:500,700' rel='stylesheet' type='text/css'>
 </head>
 <body>
-    <header>Tic Tac Toe</header>
+    <header>
+        <h1><span class="neon">NEON</span> <span class="tictactoe">TIC-TAC-TOE</span></h1>
+    </header>
     <main>
         <div class="score-board">
             <div class="left-side">
-                <!--
-                <svg class="neon-O" viewBox="0 0 100 100">
-                    <circle cx="50" cy="50" r="40" />
+                <svg class="neon-O" viewBox="0 0 10 10">
+                    <circle cx="5" cy="5" r="2.5"/>
                 </svg>
-                -->
-                <p id="player1" class="player-name"></p>
-                <p id="left-score" class="left-score"></p>
+                <p id="player1" class="player-name">John</p>
+                <p id="left-score" class="score">0</p>
             </div>
             <div class="ties">
-                <p id="ties-score" class="ties-score">Ties: </p>
+                <p>Ties</p>
+                <p id="ties-score" class="score">0</p>
             </div>
             <div class="right-side">
-                <p id="right-score" class="right-score"></p>
-                <p id="player2" class="player-name"></p>
-                <!--
-                <svg class="neon-X" viewBox="0 0 100 100">
-                    <line x1="10" y1="10" x2="90" y2="90" /> 
-                    <line x1="90" y1="10" x2="10" y2="90" />
+                <svg class="neon-X" viewBox="0 0 10 10">
+                    <line x1="2.5" y1="2.5" x2="7.5" y2="7.5" /> 
+                    <line x1="7.5" y1="2.5" x2="2.5" y2="7.5" />
                 </svg>
-                -->
+                <p id="player2" class="player-name">Stewart</p>
+                <p id="right-score" class="score">0</p>
             </div>
         </div>
         <div class="game-content">
@@ -63,7 +63,7 @@
         </div>
     </main>
     <footer>
-        Copyright © Marcos Vazquez 2025
+        Copyright © Marcos Vazquez 2026
     </footer>
     <script src="tic-tac-toe.js"></script>
 </body>

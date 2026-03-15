@@ -1,0 +1,147 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+@font-face {
+  font-family: "NeonFont";
+  src: url("NeonFont.otf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  color: rgb(169, 152, 177);
+}
+
+header {
+  background-color: rgb(59, 44, 66);
+  font-family: "NeonFont", sans-serif;
+  padding: 15px 0 15px 12px;
+}
+
+header h1 {
+  font-size: 36px;
+}
+
+header span.neon {
+  color: rgb(0, 200, 255);
+  filter: drop-shadow(0 0 5px rgba(0, 200, 255, 0.8));
+}
+
+header span.tictactoe {
+  color: rgb(255, 0, 170);
+  filter: drop-shadow(0 0 5px rgba(255, 0, 170, 0.8));
+}
+
+main {
+  font-family: 'Roboto', sans-serif;
+  background-color: rgb(59, 44, 66);
+  box-shadow: 0px 3px 10px rgb(20, 15, 22) inset;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.score-board {
+  width: min(80%, 800px);
+  display: flex;
+  justify-content: space-between;
+}
+
+.left-side,
+.right-side {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  padding: 5px 5px;
+}
+
+.left-side {
+  border-top-left-radius: 25px;
+  background: rgba(0, 200, 255, 0.15);
+}
+
+.right-side {
+  flex-direction: row-reverse;
+  border-top-right-radius: 25px;
+  background: rgba(255, 0, 170, 0.15);
+}
+
+.left-side .player-name {
+  color: rgb(0, 200, 255);
+  font-size: 18px;
+  padding-left: 5px;
+}
+
+.left-side .score {
+  color: rgb(0, 200, 255);
+  filter: drop-shadow(0 0 1px rgba(0, 200, 255, 0.8));
+  font-size: 36px;
+  margin-left: auto;
+  padding-right: 5px;
+}
+
+.right-side .player-name {
+  color: rgb(255, 0, 170);
+  font-size: 18px;
+  padding-right: 5px;
+}
+
+.right-side .score {
+  color: rgb(255, 0, 170);
+  filter: drop-shadow(0 0 1px rgba(255, 0, 170, 0.8));
+  font-size: 36px;
+  margin-right: auto;
+  padding-left: 5px;
+}
+
+.ties {
+  background-color: rgba(38, 28, 43, 0.15);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 15px;
+}
+
+.ties p {
+  font-size: 12px;
+}
+
+.ties p.score {
+  font-size: 18px;
+  color: white;
+  filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.8));
+}
+
+.neon-O,
+.neon-X {
+  height: 50px;
+  width: auto;
+}
+
+.neon-O circle {
+  fill: none;
+  stroke: rgb(0, 200, 255);
+  stroke-width: 1.25;
+  filter: drop-shadow(0 0 1px rgba(0, 200, 255, 0.8));
+}
+
+.neon-X line {
+  stroke: rgb(255, 0, 170);
+  stroke-width: 1.25;
+  filter: drop-shadow(0 0 1px rgba(255, 0, 170, 0.8));
+}
+
+footer {
+  font-family: 'Roboto', sans-serif;
+  font-size: 12px;
+  text-align: center;
+  padding: 20px 0;
+  background-color: rgb(38, 28, 43);
+}
