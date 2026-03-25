@@ -163,6 +163,7 @@ main {
   gap: 20px;
   background-color: rgb(38, 28, 43);
   padding: 50px;
+  justify-content: center;
 }
 
 .dividers {
@@ -183,29 +184,76 @@ main {
   border: none;
   border-radius: 20px;
   cursor: pointer;
+  transition: background-color 0.15s ease-in;
 }
 
 .cell:hover {
   background-color: rgb(47, 34, 53);
 }
 
-.game-window {
-  background: linear-gradient(135deg, rgba(232, 204, 246, 0.25) 0%, rgba(178, 120, 205, 0.25) 50%, rgba(82, 35, 104, 0.25) 100%);
+.game-panel {
+  background: linear-gradient(135deg, rgba(232, 204, 246, 0.25) 0%,
+                                      rgba(178, 120, 205, 0.25) 50%, 
+                                      rgba(82, 35, 104, 0.25) 100%);
   width: 100%;
-}
-
-.start-menu {
-  display: block;
-  color: rgb(220, 200, 230);
 }
 
 form {
   display: flex;
   flex-direction: column;
+  margin: 50px 30px 0 30px;
 }
 
-.logs {
-  display: none;
+label[for="player-name-O"],
+label[for="player-name-X"] {
+  margin-bottom: 5px;
+}
+
+label[for="player-name-O"] {
+  color: rgb(0, 200, 255);
+}
+
+label[for="player-name-X"] {
+  color: rgb(255, 0, 170);
+}
+
+input {
+  outline: none;
+  background: linear-gradient(135deg, rgb(232, 204, 246) 0%,
+                                      rgb(190, 147, 210) 50%, 
+                                      rgb(120, 83, 138) 100%);
+  padding: 5px;
+  font-size: 16px;
+  margin-bottom: 10px;
+  border: none;
+  box-shadow: 2px 2px 0px rgb(53, 28, 66) inset,
+              -2px -2px 0px rgb(156, 139, 165) inset;
+  width: max(60%, 300px);
+}
+
+form > button {
+  background: linear-gradient(135deg, rgb(205, 124, 255) 0%,
+                                      rgb(151, 68, 192) 50%, 
+                                      rgb(103, 0, 150) 100%);
+  color: white;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+  border: none;
+  padding: 15px;
+  width: 100px;
+  border-radius: 10px;
+  box-shadow: -2px -2px 0px rgb(54, 32, 65) inset,
+              2px 2px 0px rgb(181, 149, 198) inset;
+  cursor: pointer;
+}
+
+form > button:hover {
+  color: black;
+  background: linear-gradient(135deg, rgb(225, 176, 255) 0%,
+                                      rgb(162, 104, 191) 50%, 
+                                      rgb(108, 33, 143) 100%);
+  box-shadow: -2px -2px 0px rgb(181, 149, 198) inset,
+              2px 2px 0px rgb(54, 32, 65) inset;
 }
 
 footer {
@@ -215,4 +263,25 @@ footer {
   padding: 20px 0;
   background-color: rgb(38, 28, 43);
   color: rgb(169, 152, 177);
+}
+
+/* Media query for small screens! */
+@media (max-width: 1125px) {
+    .game-content {
+        flex-direction: column;
+    }
+
+    .game-board {
+      padding: 50px 0;
+      width: 100%;
+    }
+
+    .dividers {
+      align-self: center;
+      justify-self: center;
+    }
+
+    form {
+      margin-bottom: 50px;
+    }
 }

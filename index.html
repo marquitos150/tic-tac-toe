@@ -55,19 +55,16 @@
                 <button id="cell21" class="cell"></button>
                 <button id="cell22" class="cell"></button>
             </div>
-            <div class="game-window">
-                <div class="start-menu">
-                    <h1>Enter your names to begin playing!</h1>
-                    <form>
-                        <label for="player1-name">Player 1 Name:</label>
-                        <input type="text" id="player1-name" name="player1-name">
-                        <label for="player2-name">Player 2 Name:</label>
-                        <input type="text" id="player2-name" name="player2-name">
-                        <button type="submit">PLAY</button>
-                    </form>
-                </div>
-                <div class="logs">
-                    <!-- Dynamically add logs -->
+            <div class="game-panel">
+                <form>
+                    <label for="player-name-O">Player Name O:</label>
+                    <input type="text" id="player-name-O" name="player-name-O">
+                    <label for="player-name-X">Player Name X:</label>
+                    <input type="text" id="player-name-X" name="player-name-X">
+                    <button type="submit">PLAY</button>
+                </form>
+                <div class="game-console">
+                    <!-- Include logs based on state of game -->
                 </div>
             </div>
         </div>
