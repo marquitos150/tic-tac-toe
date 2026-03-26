@@ -1,6 +1,8 @@
 'use strict'
 
-const gameBoard = (function() {
+// IIFE (Immediately Invoked Function Expression)
+// Module pattern wraps factory in an IIFE
+const gameboard = (() => {
     const grid = [
         [' ', ' ', ' '],
         [' ', ' ', ' '],
@@ -20,11 +22,20 @@ const gameBoard = (function() {
             });
         });
     };
+    // For debugging purposes on console; will be removed eventually
+    const printGrid = () => {
+        console.log(grid[0][0], "|", grid[0][1], "|", grid[0][2]);
+        console.log("----------");
+        console.log(grid[1][0], "|", grid[1][1], "|", grid[1][2]);
+        console.log("----------");
+        console.log(grid[2][0], "|", grid[2][1], "|", grid[2][2]);
+    };
 
-    return { getGrid, setGrid, resetGrid };
+    return { getGrid, setGrid, resetGrid, printGrid };
 })();
 
-function createPlayer(name, symbol) {
+// Standard factory function (NOT AN IIFE)
+const createPlayer = (name, symbol) => {
     let winCount = 0;
 
     const getWinCount = () => winCount;
@@ -33,23 +44,15 @@ function createPlayer(name, symbol) {
     return { name, symbol, getWinCount, incrementWinCount };
 }
 
-function createGame(player1Name, player2Name) {
-    function chooseStartingPlayer() {
+// Another IIFE
+const gameController = (() => {
+    const chooseStartingPlayer = () => {
         // 0 for player1, 1 for player2
         return Math.floor(Math.random() * 2);
-    }
+    };
 
-    // print the grid for debugging purposes
-    function printGrid(currGrid) {
-        console.log(currGrid[0][0], "|", currGrid[0][1], "|", currGrid[0][2]);
-        console.log("----------");
-        console.log(currGrid[1][0], "|", currGrid[1][1], "|", currGrid[1][2]);
-        console.log("----------");
-        console.log(currGrid[2][0], "|", currGrid[2][1], "|", currGrid[2][2]);
-    }
-
-    function playRound(player) {
-        printGrid(gameBoard.getGrid());
+    const playRound = (player) => {
+        gameboard.printGrid();
         console.log("Your turn", player.name);
         while (true) {
             let chosenRow = Number(prompt("Choose row"));
@@ -59,17 +62,17 @@ function createGame(player1Name, player2Name) {
                     console.log("Please choose an integer for row and column (0 - 2 inclusive)");
             }
             else {
-                if (gameBoard.getGrid()[chosenRow][chosenCol] === ' ') {
-                    gameBoard.setGrid(player.symbol, chosenRow, chosenCol);
+                if (gameboard.getGrid()[chosenRow][chosenCol] === ' ') {
+                    gameboard.setGrid(player.symbol, chosenRow, chosenCol);
                     break;
                 }
                 console.log("Oops! Please choose another cell");
             }
         }
-    }
+    };
 
-    function findWinner(player1, player2) {
-        const currGrid = gameBoard.getGrid();
+    const findWinner = (player1, player2) => {
+        const currGrid = gameboard.getGrid();
         // check 3 in a row in each row
         if (currGrid[0].every(symbol => symbol === 'O') ||
             currGrid[1].every(symbol => symbol === 'O') ||
@@ -108,17 +111,17 @@ function createGame(player1Name, player2Name) {
         }
 
         return null;
-    }
+    };
 
-    function playGame(player1, player2, playerTurn) {
+    const playGame = (player1, player2, playerTurn) => {
         let winningPlayer = null;
         console.log("Welcome to TIC TAC TOE let's play!");
         do {
             playRound(playerTurn);
             playerTurn = (playerTurn === player1 ? player2 : player1);
             winningPlayer = findWinner(player1, player2);
-        } while (!winningPlayer && gameBoard.getGrid().findIndex(row => row.includes(' ')) !== -1)
-        printGrid(gameBoard.getGrid());
+        } while (!winningPlayer && gameboard.getGrid().findIndex(row => row.includes(' ')) !== -1)
+        gameboard.printGrid();
 
         if (winningPlayer === player1)
             console.log("CONGRATS", player1.name, "YOU WON!");
@@ -126,13 +129,14 @@ function createGame(player1Name, player2Name) {
             console.log("CONGRATS", player2.name, "YOU WON!");
         else 
             console.log("It's a tie. Good game :)");
-    }
+    };
 
-    const player1 = createPlayer(player1Name, 'O');
-    const player2 = createPlayer(player2Name, 'X');
-    let playerTurn = (chooseStartingPlayer() === 0 ? player1 : player2);
+    return { startGame: (player1Name, player2Name) => {
+        const player1 = createPlayer(player1Name, 'O');
+        const player2 = createPlayer(player2Name, 'X');
+        let playerTurn = (chooseStartingPlayer() === 0 ? player1 : player2);
+        playGame(player1, player2, playerTurn);
+    }};
+})();
 
-    playGame(player1, player2, playerTurn);
-}
-
-//createGame("Jerry", "Stewart");
+//gameController.startGame("Jerry", "Stewart");
