@@ -39,14 +39,7 @@ const GameBoard = (() => {
 // Standard factory function (NOT AN IIFE)
 // Multiple game controllers should exist for each game, each with private state 
 function GameController(playerOName="Player O", playerXName="Player X") {
-    const createPlayer = (name, symbol) => {
-        let winCount = 0;
-
-        const getWinCount = () => winCount;
-        const incrementWinCount = () => { winCount++; };
-
-        return { name, symbol, getWinCount, incrementWinCount };
-    };
+    const createPlayer = (name, symbol) => ({ name, symbol }); // { return { name, symbol}; };
 
     const players = [
         createPlayer(playerOName, 'O'),
@@ -62,6 +55,8 @@ function GameController(playerOName="Player O", playerXName="Player X") {
     let playerTurn = chooseStartingPlayer();
     let gameOver = false;
 
+    const isGameOver = () => gameOver;
+
     const getPlayerTurn = () => playerTurn;
     const switchPlayerTurn = () => {
         playerTurn = playerTurn === players[0] ? players[1] : players[0];
@@ -69,9 +64,11 @@ function GameController(playerOName="Player O", playerXName="Player X") {
 
     const printNewRound = () => {
         GameBoard.printGrid();
-        if (!gameOver) console.log("Your turn", getPlayerTurn().name);
+        console.log("Your turn", getPlayerTurn().name);
     };
 
+    let winner = null;
+    const getWinner = () => winner;
     const findWinner = () => {
         const currGrid = GameBoard.getGrid();
         // check 3 in a row in each row
@@ -124,7 +121,7 @@ function GameController(playerOName="Player O", playerXName="Player X") {
 
         GameBoard.setGrid(getPlayerTurn().symbol, row, col);
 
-        const winner = findWinner();
+        winner = findWinner();
         if (winner) {
             GameBoard.printGrid();
             console.log("CONGRATS", winner.name, "YOU WON!");
@@ -143,28 +140,45 @@ function GameController(playerOName="Player O", playerXName="Player X") {
     GameBoard.resetGrid();
     printNewRound();
 
-    return { getPlayerTurn, playRound };
+    return { getPlayerTurn, playRound, isGameOver, getWinner };
 };
 
 // Another IIFE that will immediately run once defined
 // This controller handles the display/DOM logic
 const DisplayController = (() => {
     // Game Content Elements
-    const divBoard = document.querySelector('.game-board');
-    const consoleLog = document.querySelector('.game-console');
+    const gameBoard = document.querySelector('.game-board');
+    const gameConsole = document.querySelector('.game-console');
     const form = document.querySelector('form');
 
     // Scores
     const scoreO = document.querySelector('#left-score');
     const scoreX = document.querySelector('#right-score');
-    const tieScore = document.querySelector('#ties-score');
+    const tiesScore = document.querySelector('#ties-score');
 
-    let currGame; // current game that grid and turn messages will display for it
+    let currGame = null; // current game that grid and turn messages will display for it
 
     const displayPlayerTurnMessage = (playerTurn) => {
-        consoleLog.textContent = `${playerTurn.name}'s turn...`;
+        gameConsole.textContent = `${playerTurn.name}'s turn...`;
     };
 
+    const displayFinalOutcome = (winner) => {
+        if (winner) {
+            gameConsole.textContent = `The winner is ${winner.name}!`
+        } else {
+            gameConsole.textContent = "It's a tie. Good game!";
+        }
+    }
+
+    const incrementScore = (winner) => {
+        if (winner && winner.symbol === 'O') {
+            scoreO.textContent = Number(scoreO.textContent) + 1;
+        } else if (winner && winner.symbol === 'X') {
+            scoreX.textContent = Number(scoreX.textContent) + 1;
+        } else {
+            tiesScore.textContent = Number(tiesScore.textContent) + 1;
+        }
+    }
     const gameStartHandler = (e) => {
         e.preventDefault();
         if (!currGame) {
@@ -191,11 +205,17 @@ const DisplayController = (() => {
                 const col = Number(target.dataset.col);
 
                 currGame.playRound(row, col);
-                displayPlayerTurnMessage(currGame.getPlayerTurn());
+                if (currGame.isGameOver()) {
+                    const currWinner = currGame.getWinner();
+                    displayFinalOutcome(currWinner);
+                    incrementScore(currWinner);
+                } else {
+                    displayPlayerTurnMessage(currGame.getPlayerTurn());
+                }
             }
         }
     };
 
     form.addEventListener('submit', gameStartHandler);
-    divBoard.addEventListener('click', gridClickHandler);
+    gameBoard.addEventListener('click', gridClickHandler);
 })();
