@@ -204,16 +204,16 @@ form {
   margin: 50px 30px 0 30px;
 }
 
-label[for="player-name-O"],
-label[for="player-name-X"] {
+label[for="player-O-name"],
+label[for="player-X-name"] {
   margin-bottom: 5px;
 }
 
-label[for="player-name-O"] {
+label[for="player-O-name"] {
   color: rgb(0, 200, 255);
 }
 
-label[for="player-name-X"] {
+label[for="player-X-name"] {
   color: rgb(255, 0, 170);
 }
 

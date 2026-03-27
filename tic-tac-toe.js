@@ -38,7 +38,7 @@ const GameBoard = (() => {
 
 // Standard factory function (NOT AN IIFE)
 // Multiple game controllers should exist for each game, each with private state 
-function GameController(player1Name="Player O", player2Name="Player X") {
+function GameController(playerOName="Player O", playerXName="Player X") {
     const createPlayer = (name, symbol) => {
         let winCount = 0;
 
@@ -49,12 +49,12 @@ function GameController(player1Name="Player O", player2Name="Player X") {
     };
 
     const players = [
-        createPlayer(player1Name, 'O'),
-        createPlayer(player2Name, 'X')
+        createPlayer(playerOName, 'O'),
+        createPlayer(playerXName, 'X')
     ];
 
     const chooseStartingPlayer = () => {
-        // 0 for player1, 1 for player2
+        // 0 for player O, 1 for player X
         const binaryNum = Math.floor(Math.random() * 2);
         return binaryNum === 0 ? players[0] : players[1];
     };
@@ -154,9 +154,37 @@ function GameController(player1Name="Player O", player2Name="Player X") {
 
     return { getPlayerTurn, playRound };
 };
-// Another IIFE
-/*
+
+// Another IIFE that will immediately run once defined
+// This controller handles the display/DOM logic
 const DisplayController = (() => {
-    
+    // Game Content Elements
+    const divBoard = document.querySelector('.game-board');
+    const consoleLog = document.querySelector('.game-console');
+    const form = document.querySelector('form');
+
+    // Scores
+    const scoreO = document.querySelector('#left-score');
+    const scoreX = document.querySelector('#right-score');
+    const tieScore = document.querySelector('#ties-score');
+
+    const displayPlayerTurnMessage = (playerTurn) => {
+        consoleLog.textContent = `${playerTurn.name}'s turn...`;
+    };
+
+    const gameStartHandler = (e) => {
+        e.preventDefault();
+        const playerOName = document.querySelector('#player-O-name').value || undefined;
+        const playerXName = document.querySelector('#player-X-name').value || undefined;
+
+        // Invoke Game Controller Factory Function to start new game
+        const game = GameController(playerOName, playerXName);
+        
+        // Log in game console who will go first
+        displayPlayerTurnMessage(game.getPlayerTurn());
+
+        // TODO: disable form so users cannot edit inputs or press play again until the game is over
+    };
+
+    form.addEventListener('submit', gameStartHandler);
 })();
-*/
