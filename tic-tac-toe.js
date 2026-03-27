@@ -114,31 +114,22 @@ function GameController(playerOName="Player O", playerXName="Player X") {
         return null;
     };
 
-    const playRound = () => {
+    const playRound = (row, col) => {
         if (gameOver) return;
 
-        while (true) {
-            let chosenRow = Number(prompt("Choose row"));
-            let chosenCol = Number(prompt("Choose col"));
-            if (!Number.isInteger(chosenRow) || !Number.isInteger(chosenCol) ||
-                chosenRow < 0 || chosenRow > 2 || chosenCol < 0 || chosenCol > 2) {
-                    console.log("Please choose an integer for row and column (0 - 2 inclusive)");
-            }
-            else if (GameBoard.getGrid()[chosenRow][chosenCol] !== ' ') {
-                console.log("Oops! Please choose another cell");
-            }
-            else {
-                GameBoard.setGrid(getPlayerTurn().symbol, chosenRow, chosenCol);
-                break;
-            }
+        if (GameBoard.getGrid()[row][col] !== ' ') {
+            console.log("Oops! Please choose another cell");
+            return;
         }
+
+        GameBoard.setGrid(getPlayerTurn().symbol, row, col);
 
         const winner = findWinner();
         if (winner) {
             GameBoard.printGrid();
             console.log("CONGRATS", winner.name, "YOU WON!");
             gameOver = true;
-        } else if (GameBoard.getGrid().every(row => row.every(cell => cell !== ' '))) {
+        } else if (GameBoard.getGrid().every(r => r.every(cell => cell !== ' '))) {
             GameBoard.printGrid();
             console.log("It's a tie. Good game!");
             gameOver = true;
@@ -168,23 +159,43 @@ const DisplayController = (() => {
     const scoreX = document.querySelector('#right-score');
     const tieScore = document.querySelector('#ties-score');
 
+    let currGame; // current game that grid and turn messages will display for it
+
     const displayPlayerTurnMessage = (playerTurn) => {
         consoleLog.textContent = `${playerTurn.name}'s turn...`;
     };
 
     const gameStartHandler = (e) => {
         e.preventDefault();
-        const playerOName = document.querySelector('#player-O-name').value || undefined;
-        const playerXName = document.querySelector('#player-X-name').value || undefined;
+        if (!currGame) {
+            const playerOName = document.querySelector('#player-O-name').value || undefined;
+            const playerXName = document.querySelector('#player-X-name').value || undefined;
 
-        // Invoke Game Controller Factory Function to start new game
-        const game = GameController(playerOName, playerXName);
+            // Invoke Game Controller Factory Function to start new game
+            currGame = GameController(playerOName, playerXName);
         
-        // Log in game console who will go first
-        displayPlayerTurnMessage(game.getPlayerTurn());
+            // Log in game console who will go first
+            displayPlayerTurnMessage(currGame.getPlayerTurn());
 
-        // TODO: disable form so users cannot edit inputs or press play again until the game is over
+            // TODO: disable form so users cannot edit inputs or press play again until the game is over
+        }
+    };
+
+    const gridClickHandler = (e) => {
+        if (currGame) {
+            let target = e.target;
+            target.blur();
+
+            if (target.classList.contains('cell')) {
+                const row = Number(target.dataset.row);
+                const col = Number(target.dataset.col);
+
+                currGame.playRound(row, col);
+                displayPlayerTurnMessage(currGame.getPlayerTurn());
+            }
+        }
     };
 
     form.addEventListener('submit', gameStartHandler);
+    divBoard.addEventListener('click', gridClickHandler);
 })();
