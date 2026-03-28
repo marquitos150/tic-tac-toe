@@ -209,6 +209,7 @@ const DisplayController = (() => {
                     const currWinner = currGame.getWinner();
                     displayFinalOutcome(currWinner);
                     incrementScore(currWinner);
+                    currGame = null; // current game is finished, reset to null
                 } else {
                     displayPlayerTurnMessage(currGame.getPlayerTurn());
                 }
