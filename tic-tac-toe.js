@@ -24,22 +24,16 @@ const GameBoard = (() => {
         });
     };
 
-    // For debugging purposes on console; will be removed eventually
-    const printGrid = () => {
-        console.log(grid[0][0], "|", grid[0][1], "|", grid[0][2]);
-        console.log("----------");
-        console.log(grid[1][0], "|", grid[1][1], "|", grid[1][2]);
-        console.log("----------");
-        console.log(grid[2][0], "|", grid[2][1], "|", grid[2][2]);
-    };
-
-    return { getGrid, setGrid, resetGrid, printGrid };
+    return { getGrid, setGrid, resetGrid };
 })();
 
 // Standard factory function (NOT AN IIFE)
 // Multiple game controllers should exist for each game, each with private state 
 function GameController(playerOName="Player O", playerXName="Player X") {
-    const createPlayer = (name, symbol) => ({ name, symbol }); // { return { name, symbol}; };
+    // Reset board for new game
+    GameBoard.resetGrid();
+    
+    const createPlayer = (name, symbol) => ({ name, symbol });
 
     const players = [
         createPlayer(playerOName, 'O'),
@@ -53,18 +47,9 @@ function GameController(playerOName="Player O", playerXName="Player X") {
     };
 
     let playerTurn = chooseStartingPlayer();
-    let gameOver = false;
-
-    const isGameOver = () => gameOver;
-
     const getPlayerTurn = () => playerTurn;
     const switchPlayerTurn = () => {
         playerTurn = playerTurn === players[0] ? players[1] : players[0];
-    };
-
-    const printNewRound = () => {
-        GameBoard.printGrid();
-        console.log("Your turn", getPlayerTurn().name);
     };
 
     let winner = null;
@@ -112,35 +97,20 @@ function GameController(playerOName="Player O", playerXName="Player X") {
     };
 
     const playRound = (row, col) => {
-        if (gameOver) return;
-
-        if (GameBoard.getGrid()[row][col] !== ' ') {
-            console.log("Oops! Please choose another cell");
-            return;
-        }
-
         GameBoard.setGrid(getPlayerTurn().symbol, row, col);
-
-        winner = findWinner();
-        if (winner) {
-            GameBoard.printGrid();
-            console.log("CONGRATS", winner.name, "YOU WON!");
-            gameOver = true;
-        } else if (GameBoard.getGrid().every(r => r.every(cell => cell !== ' '))) {
-            GameBoard.printGrid();
-            console.log("It's a tie. Good game!");
-            gameOver = true;
-        } else {
-            switchPlayerTurn();
-            printNewRound();
-        }
     };
 
-    // Reset board for new game
-    GameBoard.resetGrid();
-    printNewRound();
+    const isGameOver = () => {
+        winner = findWinner();
+        if (winner || GameBoard.getGrid().every(r => r.every(cell => cell !== ' '))) {
+            return true;
+        }
+        // if the game is not over, switch player's turn
+        switchPlayerTurn();
+        return false;
+    };
 
-    return { getPlayerTurn, playRound, isGameOver, getWinner };
+    return { getPlayerTurn, getWinner, playRound, isGameOver };
 };
 
 // Another IIFE that will immediately run once defined
@@ -158,6 +128,71 @@ const DisplayController = (() => {
 
     let currGame = null; // current game that grid and turn messages will display for it
 
+    const enableCell = (cell) => {
+        cell.classList.add("available");
+    };
+
+    const disableCell = (cell) => {
+        cell.classList.remove("available");
+    };
+
+    const enableAllCells = () => {
+        const children = [...gameBoard.children];
+        children.forEach((child) => {
+            if (child.classList.contains("cell")) {
+                child.replaceChildren(); // remove symbol
+                enableCell(child);
+            }
+        });
+    };
+
+    const disableAllCells = () => {
+        const children = [...gameBoard.children];
+        children.forEach((child) => {
+            if (child.classList.contains("available")) {
+                disableCell(child);
+            }
+        });
+    };
+
+    const displayO = () => {
+        const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.classList.add("neon-O");
+        svg.setAttribute("viewBox", "0 0 100 100");
+
+        // draw O
+        const circle = document.createElementNS(svg.namespaceURI, "circle");
+        circle.setAttribute("cx", "50");
+        circle.setAttribute("cy", "50");
+        circle.setAttribute("r", "25");
+
+        svg.appendChild(circle);
+        return svg;
+    };
+
+    const displayX = () => {
+        const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.classList.add("neon-X");
+        svg.setAttribute("viewBox", "0 0 100 100");
+
+        // draw X
+        const line1 = document.createElementNS(svg.namespaceURI, "line");
+        line1.setAttribute("x1", "25");
+        line1.setAttribute("y1", "25");
+        line1.setAttribute("x2", "75");
+        line1.setAttribute("y2", "75");
+
+        const line2 = document.createElementNS(svg.namespaceURI, "line");
+        line2.setAttribute("x1", "75");
+        line2.setAttribute("y1", "25");
+        line2.setAttribute("x2", "25");
+        line2.setAttribute("y2", "75");
+
+        svg.appendChild(line1);
+        svg.appendChild(line2);
+        return svg;
+    };
+
     const displayPlayerTurnMessage = (playerTurn) => {
         gameConsole.textContent = `${playerTurn.name}'s turn...`;
     };
@@ -168,7 +203,7 @@ const DisplayController = (() => {
         } else {
             gameConsole.textContent = "It's a tie. Good game!";
         }
-    }
+    };
 
     const incrementScore = (winner) => {
         if (winner && winner.symbol === 'O') {
@@ -178,42 +213,60 @@ const DisplayController = (() => {
         } else {
             tiesScore.textContent = Number(tiesScore.textContent) + 1;
         }
-    }
+    };
+
     const gameStartHandler = (e) => {
         e.preventDefault();
-        if (!currGame) {
-            const playerOName = document.querySelector('#player-O-name').value || undefined;
-            const playerXName = document.querySelector('#player-X-name').value || undefined;
+        if (currGame) return;
 
-            // Invoke Game Controller Factory Function to start new game
-            currGame = GameController(playerOName, playerXName);
+        const playerOName = document.querySelector('#player-O-name').value || undefined;
+        const playerXName = document.querySelector('#player-X-name').value || undefined;
+
+        // Invoke Game Controller Factory Function to start new game
+        currGame = GameController(playerOName, playerXName);
         
-            // Log in game console who will go first
-            displayPlayerTurnMessage(currGame.getPlayerTurn());
+        // Reset the game board for new game and enable cells to be clicked on
+        enableAllCells();
 
-            // TODO: disable form so users cannot edit inputs or press play again until the game is over
-        }
+        // Log in game console who will go first
+        displayPlayerTurnMessage(currGame.getPlayerTurn());
+
+        // TODO: disable form so users cannot edit inputs or press play again until the game is over
     };
 
     const gridClickHandler = (e) => {
-        if (currGame) {
-            let target = e.target;
-            target.blur();
+        if (!currGame) return;
 
-            if (target.classList.contains('cell')) {
-                const row = Number(target.dataset.row);
-                const col = Number(target.dataset.col);
+        let cell = e.target;
+        cell.blur();
 
-                currGame.playRound(row, col);
-                if (currGame.isGameOver()) {
-                    const currWinner = currGame.getWinner();
-                    displayFinalOutcome(currWinner);
-                    incrementScore(currWinner);
-                    currGame = null; // current game is finished, reset to null
-                } else {
-                    displayPlayerTurnMessage(currGame.getPlayerTurn());
-                }
-            }
+        if (!cell.classList.contains('cell')) return;
+
+        const row = Number(cell.dataset.row);
+        const col = Number(cell.dataset.col);
+
+        if (GameBoard.getGrid()[row][col] !== ' ') return;
+
+        currGame.playRound(row, col);
+        
+        // Display symbol and disable cell
+        if (GameBoard.getGrid()[row][col] === 'O') {
+            cell.appendChild(displayO());
+        } else {
+            cell.appendChild(displayX());
+        }
+        disableCell(cell);
+
+        if (currGame.isGameOver()) {
+            // make all cells unavailable
+            disableAllCells();
+
+            const currWinner = currGame.getWinner();
+            displayFinalOutcome(currWinner);
+            incrementScore(currWinner);
+            currGame = null; // current game is finished, reset to null
+        } else {
+            displayPlayerTurnMessage(currGame.getPlayerTurn());
         }
     };
 

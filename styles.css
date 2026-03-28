@@ -48,7 +48,7 @@ main {
 }
 
 .score-board {
-  width: max(80%, 500px);
+  width: max(80%, 360px);
   display: flex;
   justify-content: space-between;
 }
@@ -60,36 +60,35 @@ main {
   flex: 1;
 }
 
-.neon-O,
-.neon-X {
-  height: 50px;
+.singular-neon-O,
+.singular-neon-X {
+  height: 43px;
   width: auto;
-  background-color: black;
   padding: 5px;
 }
 
-.neon-O {
+.singular-neon-O {
   border-top-left-radius: 25px;
   background-color: rgba(0, 200, 255, 0.15);
   border-left: 2px solid rgb(0, 29, 36);
   border-top: 2px solid rgb(0, 29, 36);
 }
 
-.neon-X {
+.singular-neon-X {
   border-top-right-radius: 25px;
   background-color: rgba(255, 0, 170, 0.15);
   border-right: 2px solid rgb(48, 0, 32);
   border-top: 2px solid rgb(48, 0, 32);
 }
 
-.neon-O circle {
+.singular-neon-O circle {
   fill: none;
   stroke: rgb(0, 200, 255);
   stroke-width: 1.25;
   filter: drop-shadow(0 0 1px rgba(0, 200, 255, 0.8));
 }
 
-.neon-X line {
+.singular-neon-X line {
   stroke: rgb(255, 0, 170);
   stroke-width: 1.25;
   filter: drop-shadow(0 0 1px rgba(255, 0, 170, 0.8));
@@ -98,7 +97,7 @@ main {
 .left-side .player-score-tab {
   background-color: rgba(0, 113, 141, 0.15);
   color: rgb(0, 200, 255);
-  font-size: 18px;
+  font-size: 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -109,13 +108,13 @@ main {
 
 .left-side .score {
   filter: drop-shadow(0 0 1px rgba(0, 200, 255, 0.8));
-  font-size: 36px;
+  font-size: 30px;
 }
 
 .right-side .player-score-tab {
   background-color: rgba(152, 0, 101, 0.15);
   color: rgb(255, 0, 170);
-  font-size: 18px;
+  font-size: 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -126,7 +125,7 @@ main {
 
 .right-side .score {
   filter: drop-shadow(0 0 1px rgba(255, 0, 170, 0.8));
-  font-size: 36px;
+  font-size: 30px;
 }
 
 .ties {
@@ -145,29 +144,29 @@ main {
 }
 
 .ties p.score {
-  font-size: 24px;
+  font-size: 20px;
   color: white;
   filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.8));
 }
 
 .game-content {
   box-shadow: 0px -5px 10px rgba(20, 15, 22, 0.5);
-  width: max(80%, 500px);
+  width: max(80%, 360px);
   display: flex;
 }
 
 .game-board {
   display: grid;
-  grid-template-rows: 130px 130px 130px;
-  grid-template-columns: 130px 130px 130px;
+  grid-template-rows: 100px 100px 100px;
+  grid-template-columns: 100px 100px 100px;
   gap: 20px;
   background-color: rgb(38, 28, 43);
-  padding: 50px;
+  padding: 10px;
   justify-content: center;
 }
 
 .dividers {
-  height: 430px;
+  height: 340px;
   width: auto;
   position: absolute;
   pointer-events: none;
@@ -183,11 +182,30 @@ main {
   background-color: rgb(38, 28, 43);
   border: none;
   border-radius: 20px;
-  cursor: pointer;
   transition: background-color 0.15s ease-in;
 }
 
-.cell:hover {
+.neon-O,
+.neon-X {
+  height: 100px;
+  width: auto;
+}
+
+.neon-O circle {
+  fill: none;
+  stroke: rgb(0, 200, 255);
+  stroke-width: 10;
+  filter: drop-shadow(0 0 5px rgba(0, 200, 255, 0.8));
+}
+
+.neon-X line {
+  stroke: rgb(255, 0, 170);
+  stroke-width: 10;
+  filter: drop-shadow(0 0 5px rgba(255, 0, 170, 0.8));
+}
+
+.cell.available:hover {
+  cursor: pointer;
   background-color: rgb(47, 34, 53);
 }
 
@@ -201,7 +219,7 @@ main {
 form {
   display: flex;
   flex-direction: column;
-  margin: 50px 30px 0 30px;
+  margin: 30px 30px 0 30px;
 }
 
 label[for="player-O-name"],
@@ -228,7 +246,7 @@ input {
   border: none;
   box-shadow: 2px 2px 0px rgb(53, 28, 66) inset,
               -2px -2px 0px rgb(156, 139, 165) inset;
-  width: max(60%, 300px);
+  width: max(60%, 150px);
 }
 
 form > button {
@@ -266,13 +284,13 @@ footer {
 }
 
 /* Media query for small screens! */
-@media (max-width: 1125px) {
+@media (max-width: 740px) {
     .game-content {
         flex-direction: column;
     }
 
     .game-board {
-      padding: 50px 0;
+      padding: 10px 0;
       width: 100%;
     }
 
@@ -282,6 +300,6 @@ footer {
     }
 
     form {
-      margin-bottom: 50px;
+      margin-bottom: 5px;
     }
 }
