@@ -131,7 +131,6 @@ const DisplayController = (() => {
     const enableCell = (cell) => {
         cell.classList.add("available");
     };
-
     const disableCell = (cell) => {
         cell.classList.remove("available");
     };
@@ -145,7 +144,6 @@ const DisplayController = (() => {
             }
         });
     };
-
     const disableAllCells = () => {
         const children = [...gameBoard.children];
         children.forEach((child) => {
@@ -153,6 +151,13 @@ const DisplayController = (() => {
                 disableCell(child);
             }
         });
+    };
+
+    const enableForm = () => {
+        form.classList.remove("disabled");
+    };
+    const disableForm = () => {
+        form.classList.add("disabled");
     };
 
     const displayO = () => {
@@ -169,7 +174,6 @@ const DisplayController = (() => {
         svg.appendChild(circle);
         return svg;
     };
-
     const displayX = () => {
         const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         svg.classList.add("neon-X");
@@ -199,7 +203,7 @@ const DisplayController = (() => {
 
     const displayFinalOutcome = (winner) => {
         if (winner) {
-            gameConsole.textContent = `The winner is ${winner.name}!`
+            gameConsole.textContent = `The winner is ${winner.name}!`;
         } else {
             gameConsole.textContent = "It's a tie. Good game!";
         }
@@ -231,7 +235,8 @@ const DisplayController = (() => {
         // Log in game console who will go first
         displayPlayerTurnMessage(currGame.getPlayerTurn());
 
-        // TODO: disable form so users cannot edit inputs or press play again until the game is over
+        // Disable form so users cannot edit inputs or press play again until the game is over
+        disableForm();
     };
 
     const gridClickHandler = (e) => {
@@ -265,6 +270,9 @@ const DisplayController = (() => {
             displayFinalOutcome(currWinner);
             incrementScore(currWinner);
             currGame = null; // current game is finished, reset to null
+
+            // enable the form so user can press play again or possibly change names
+            enableForm();
         } else {
             displayPlayerTurnMessage(currGame.getPlayerTurn());
         }

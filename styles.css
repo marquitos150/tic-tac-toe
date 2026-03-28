@@ -274,6 +274,11 @@ form > button:hover {
               2px 2px 0px rgb(54, 32, 65) inset;
 }
 
+form.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
 footer {
   font-family: 'Roboto', sans-serif;
   font-size: 12px;
