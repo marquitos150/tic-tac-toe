@@ -53,19 +53,23 @@ function GameController(playerOName="Player O", playerXName="Player X") {
     };
 
     let winner = null;
+    let winningLineDirection = null;
     const getWinner = () => winner;
+    const getWinningLineDirection = () => winningLineDirection;
     const findWinner = () => {
         const currGrid = GameBoard.getGrid();
         // check 3 in a row in each row
         if (currGrid[0].every(symbol => symbol === 'O') ||
             currGrid[1].every(symbol => symbol === 'O') ||
             currGrid[2].every(symbol => symbol === 'O')) {
-                return players[0];
+            winningLineDirection = "horizontal";
+            return players[0];
         } 
         if (currGrid[0].every(symbol => symbol === 'X') ||
             currGrid[1].every(symbol => symbol === 'X') ||
             currGrid[2].every(symbol => symbol === 'X')) {
-                return players[1];
+            winningLineDirection = "horizontal";
+            return players[1];
         }
 
         // check 3 in a row in each column
@@ -73,12 +77,14 @@ function GameController(playerOName="Player O", playerXName="Player X") {
         if (currGridReversed[0].every(symbol => symbol === 'O') ||
             currGridReversed[1].every(symbol => symbol === 'O') ||
             currGridReversed[2].every(symbol => symbol === 'O')) {
-                return players[0];
+            winningLineDirection = "vertical";
+            return players[0];
         }
         if (currGridReversed[0].every(symbol => symbol === 'X') ||
             currGridReversed[1].every(symbol => symbol === 'X') ||
             currGridReversed[2].every(symbol => symbol === 'X')) {
-                return players[1];
+            winningLineDirection = "vertical";
+            return players[1];
         }
 
         // check 3 in a row for each diagonal
@@ -86,10 +92,12 @@ function GameController(playerOName="Player O", playerXName="Player X") {
         const secondDiagonal = [currGrid[0][2], currGrid[1][1], currGrid[2][0]];
         if (firstDiagonal.every(symbol => symbol === 'O') ||
             secondDiagonal.every(symbol => symbol === 'O')) {
+            winningLineDirection = "diagonal";
             return players[0];
         }
         if (firstDiagonal.every(symbol => symbol === 'X') ||
             secondDiagonal.every(symbol => symbol === 'X')) {
+            winningLineDirection = "diagonal";
             return players[1];
         }
 
@@ -101,8 +109,9 @@ function GameController(playerOName="Player O", playerXName="Player X") {
     };
 
     const isGameOver = () => {
+        const currGrid = GameBoard.getGrid();
         winner = findWinner();
-        if (winner || GameBoard.getGrid().every(r => r.every(cell => cell !== ' '))) {
+        if (winner || currGrid.every(r => r.every(cell => cell !== ' '))) {
             return true;
         }
         // if the game is not over, switch player's turn
@@ -110,7 +119,7 @@ function GameController(playerOName="Player O", playerXName="Player X") {
         return false;
     };
 
-    return { getPlayerTurn, getWinner, playRound, isGameOver };
+    return { getPlayerTurn, getWinner, getWinningLineDirection, playRound, isGameOver };
 };
 
 // Another IIFE that will immediately run once defined
@@ -160,17 +169,29 @@ const DisplayController = (() => {
         form.classList.add("disabled");
     };
 
+    const createCircle = (cx, cy, r) => {
+        const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        circle.setAttribute("cx", cx);
+        circle.setAttribute("cy", cy);
+        circle.setAttribute("r", r);
+        return circle;
+    };
+    const createLine = (x1, y1, x2, y2) => {
+        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        line.setAttribute("x1", x1);
+        line.setAttribute("y1", y1);
+        line.setAttribute("x2", x2);
+        line.setAttribute("y2", y2);
+        return line;
+    };
+    
     const displayO = () => {
         const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         svg.classList.add("neon-O");
         svg.setAttribute("viewBox", "0 0 100 100");
 
         // draw O
-        const circle = document.createElementNS(svg.namespaceURI, "circle");
-        circle.setAttribute("cx", "50");
-        circle.setAttribute("cy", "50");
-        circle.setAttribute("r", "25");
-
+        const circle = createCircle(50, 50, 25);
         svg.appendChild(circle);
         return svg;
     };
@@ -180,18 +201,8 @@ const DisplayController = (() => {
         svg.setAttribute("viewBox", "0 0 100 100");
 
         // draw X
-        const line1 = document.createElementNS(svg.namespaceURI, "line");
-        line1.setAttribute("x1", "25");
-        line1.setAttribute("y1", "25");
-        line1.setAttribute("x2", "75");
-        line1.setAttribute("y2", "75");
-
-        const line2 = document.createElementNS(svg.namespaceURI, "line");
-        line2.setAttribute("x1", "75");
-        line2.setAttribute("y1", "25");
-        line2.setAttribute("x2", "25");
-        line2.setAttribute("y2", "75");
-
+        const line1 = createLine(25, 25, 75, 75);
+        const line2 = createLine(75, 25, 25, 75);
         svg.appendChild(line1);
         svg.appendChild(line2);
         return svg;
@@ -206,6 +217,57 @@ const DisplayController = (() => {
             gameConsole.textContent = `The winner is ${winner.name}!`;
         } else {
             gameConsole.textContent = "It's a tie. Good game!";
+        }
+    };
+
+    const displayWinningLine = () => {
+        const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.classList.add("winning-line");
+        svg.setAttribute("viewBox", "0 0 340 340");
+        
+        const currGrid = GameBoard.getGrid();
+        const direction = currGame.getWinningLineDirection();
+        let winningLine = null;
+        
+        if (direction === "horizontal") {
+            if (currGrid[0].every(symbol => symbol === 'O') ||
+                currGrid[0].every(symbol => symbol === 'X')) {
+                winningLine = createLine(20, 50, 320, 50);
+            } else if (currGrid[1].every(symbol => symbol === "O") ||
+                currGrid[1].every(symbol => symbol === 'X')) {
+                winningLine = createLine(20, 170, 320, 170);
+            } else {
+                winningLine = createLine(20, 290, 320, 290);
+            }
+        } else if (direction === "vertical") {
+            const currGridReversed = currGrid[0].map((_, col) => currGrid.map(row => row[col]));
+            if (currGridReversed[0].every(symbol => symbol === 'O') ||
+                currGridReversed[0].every(symbol => symbol === 'X')) {
+                winningLine = createLine(50, 20, 50, 320);
+            } else if (currGridReversed[1].every(symbol => symbol === 'O') ||
+                currGridReversed[1].every(symbol => symbol === 'X')) {
+                winningLine = createLine(170, 20, 170, 320);
+            } else {
+                winningLine = createLine(290, 20, 290, 320);
+            }
+        } else { // diagonal winning line
+            const diagonal = [currGrid[0][0], currGrid[1][1], currGrid[2][2]];
+            if (diagonal.every(symbol => symbol === 'O') ||
+                diagonal.every(symbol => symbol === 'X')) {
+                winningLine = createLine(20, 20, 320, 320);
+            } else {
+                winningLine = createLine(320, 20, 20, 320);
+            }
+        }
+
+        svg.appendChild(winningLine);
+        return svg;
+    };
+
+    const removeWinningLine = () => {
+        const lastChild = gameBoard.lastElementChild;
+        if (lastChild.classList.contains("winning-line")) {
+            gameBoard.removeChild(lastChild);
         }
     };
 
@@ -229,8 +291,9 @@ const DisplayController = (() => {
         // Invoke Game Controller Factory Function to start new game
         currGame = GameController(playerOName, playerXName);
         
-        // Reset the game board for new game and enable cells to be clicked on
+        // Reset the game board for new game
         enableAllCells();
+        removeWinningLine();
 
         // Log in game console who will go first
         displayPlayerTurnMessage(currGame.getPlayerTurn());
@@ -263,10 +326,10 @@ const DisplayController = (() => {
         disableCell(cell);
 
         if (currGame.isGameOver()) {
-            // make all cells unavailable
             disableAllCells();
 
             const currWinner = currGame.getWinner();
+            if (currWinner) gameBoard.append(displayWinningLine());
             displayFinalOutcome(currWinner);
             incrementScore(currWinner);
             currGame = null; // current game is finished, reset to null

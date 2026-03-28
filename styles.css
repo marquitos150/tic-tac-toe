@@ -165,7 +165,8 @@ main {
   justify-content: center;
 }
 
-.dividers {
+.dividers,
+.winning-line {
   height: 340px;
   width: auto;
   position: absolute;
@@ -176,6 +177,12 @@ main {
   stroke: white;
   stroke-width: 5;
   filter: drop-shadow(0 0 5px rgba(255, 255, 255));
+}
+
+.winning-line line {
+  stroke: yellow;
+  stroke-width: 5;
+  filter: drop-shadow(0 0 5px rgb(255, 255, 0));
 }
 
 .cell {
@@ -299,7 +306,8 @@ footer {
       width: 100%;
     }
 
-    .dividers {
+    .dividers,
+    .winning-line {
       align-self: center;
       justify-self: center;
     }
