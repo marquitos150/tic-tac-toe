@@ -53,11 +53,28 @@ main {
   justify-content: space-between;
 }
 
-.left-side,
-.right-side {
+.player {
   display: flex;
   align-items: center;
   flex: 1;
+  min-width: 0;
+}
+
+.left {
+  background-color: rgba(0, 113, 141, 0.15);
+  color: rgb(0, 200, 255);
+  border-top: 2px solid rgb(0, 29, 36);
+  border-left: 2px solid rgb(0, 29, 36);
+  border-top-left-radius: 25px;
+}
+
+.right {
+  background-color: rgba(152, 0, 101, 0.15);
+  color: rgb(255, 0, 170);
+  border-top: 2px solid rgb(48, 0, 32);
+  border-right: 2px solid rgb(48, 0, 32);
+  border-top-right-radius: 25px;
+  justify-content: flex-end;
 }
 
 .singular-neon-O,
@@ -65,20 +82,17 @@ main {
   height: 43px;
   width: auto;
   padding: 5px;
+  flex-shrink: 0;
 }
 
 .singular-neon-O {
-  border-top-left-radius: 25px;
   background-color: rgba(0, 200, 255, 0.15);
-  border-left: 2px solid rgb(0, 29, 36);
-  border-top: 2px solid rgb(0, 29, 36);
+  border-top-left-radius: 25px;
 }
 
 .singular-neon-X {
-  border-top-right-radius: 25px;
   background-color: rgba(255, 0, 170, 0.15);
-  border-right: 2px solid rgb(48, 0, 32);
-  border-top: 2px solid rgb(48, 0, 32);
+  border-top-right-radius: 25px;
 }
 
 .singular-neon-O circle {
@@ -94,38 +108,26 @@ main {
   filter: drop-shadow(0 0 1px rgba(255, 0, 170, 0.8));
 }
 
-.left-side .player-score-tab {
-  background-color: rgba(0, 113, 141, 0.15);
-  color: rgb(0, 200, 255);
-  font-size: 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex: 1;
-  padding: 8.75px 10px;
-  border-top: 2px solid rgb(0, 29, 36);
+.score {
+  flex-shrink: 0;
+  font-size: 30px;
 }
 
-.left-side .score {
+.left .score {
   filter: drop-shadow(0 0 1px rgba(0, 200, 255, 0.8));
-  font-size: 30px;
+  margin-left: auto;
 }
 
-.right-side .player-score-tab {
-  background-color: rgba(152, 0, 101, 0.15);
-  color: rgb(255, 0, 170);
-  font-size: 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex: 1;
-  padding: 8.75px 10px;
-  border-top: 2px solid rgb(48, 0, 32);
-}
-
-.right-side .score {
+.right .score {
   filter: drop-shadow(0 0 1px rgba(255, 0, 170, 0.8));
-  font-size: 30px;
+  margin-right: auto;
+}
+
+.player-name {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .ties {
@@ -136,6 +138,7 @@ main {
   align-items: center;
   padding: 5px 15px;
   border-top: 2px solid rgb(18, 13, 20);
+  flex-shrink: 0;
 }
 
 .ties p {
