@@ -130,6 +130,10 @@ const DisplayController = (() => {
     const gameConsole = document.querySelector('.game-console');
     const form = document.querySelector('form');
 
+    // Player Names
+    let playerOName = document.querySelector('#playerO');
+    let playerXName = document.querySelector('#playerX');
+
     // Scores
     const scoreO = document.querySelector('#left-score');
     const scoreX = document.querySelector('#right-score');
@@ -281,15 +285,43 @@ const DisplayController = (() => {
         }
     };
 
+    const resetScores = () => {
+        scoreO.textContent = 0;
+        scoreX.textContent = 0;
+        tiesScore.textContent = 0;
+    };
+
+    const replaceNameResetScores = (playerOInput, playerXInput) => {
+        if (!playerOInput && playerOName.textContent !== "Player O") {
+            playerOName.textContent = "Player O";
+            resetScores();
+        }
+        if (!playerXInput && playerXName.textContent !== "Player X") {
+            playerXName.textContent = "Player X";
+            resetScores();
+        }
+        if (playerOInput && playerOInput !== playerOName.textContent) {
+            playerOName.textContent = playerOInput;
+            resetScores();
+        }
+        if (playerXInput && playerXInput !== playerXName.textContent) {
+            playerXName.textContent = playerXInput;
+            resetScores();
+        }
+    };
+
     const gameStartHandler = (e) => {
         e.preventDefault();
         if (currGame) return;
 
-        const playerOName = document.querySelector('#player-O-name').value || undefined;
-        const playerXName = document.querySelector('#player-X-name').value || undefined;
+        const playerOInput = document.querySelector('#player-O-name').value || undefined;
+        const playerXInput = document.querySelector('#player-X-name').value || undefined;
 
         // Invoke Game Controller Factory Function to start new game
-        currGame = GameController(playerOName, playerXName);
+        currGame = GameController(playerOInput, playerXInput);
+
+        // If player input changed, change name(s) on scoreboard and reset scores
+        replaceNameResetScores(playerOInput, playerXInput);
         
         // Reset the game board for new game
         enableAllCells();
