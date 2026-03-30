@@ -212,8 +212,19 @@ const DisplayController = (() => {
         return svg;
     };
 
+    const changeTextColor = (player) => {
+        if (player.symbol === 'O') {
+            gameConsole.classList.remove("player-X");
+            gameConsole.classList.add("player-O");
+        } else {
+            gameConsole.classList.remove("player-O");
+            gameConsole.classList.add("player-X");
+        }
+    };
+
     const displayPlayerTurnMessage = (playerTurn) => {
         gameConsole.textContent = `${playerTurn.name}'s turn...`;
+        changeTextColor(playerTurn);
     };
 
     const displayFinalOutcome = (winner) => {
@@ -221,6 +232,9 @@ const DisplayController = (() => {
             gameConsole.textContent = `The winner is ${winner.name}!`;
         } else {
             gameConsole.textContent = "It's a tie. Good game!";
+            // use default color
+            gameConsole.classList.remove("player-O");
+            gameConsole.classList.remove("player_X");
         }
     };
 

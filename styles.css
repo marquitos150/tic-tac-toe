@@ -229,6 +229,8 @@ main {
                                       rgba(178, 120, 205, 0.25) 50%, 
                                       rgba(82, 35, 104, 0.25) 100%);
   width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 form {
@@ -294,13 +296,37 @@ form.disabled {
   opacity: 0.5;
 }
 
+.game-console {
+  background-color: rgb(38, 28, 43);
+  color: rgb(156, 139, 165);
+  filter: drop-shadow(0 0 5px rgba(156, 139, 165));
+  flex: 1;
+  margin: 10px 30px;
+  padding: 10px;
+  border: 2px solid rgb(156, 139, 165);
+  border-radius: 10px;
+  cursor: default;
+}
+
+.game-console.player-O {
+  color: rgb(0, 200, 255);
+  filter: drop-shadow(0 0 5px rgba(0, 200, 255, 0.8));
+  border: 2px solid rgb(0, 200, 255);
+}
+
+.game-console.player-X {
+  color: rgb(255, 0, 170);
+  filter: drop-shadow(0 0 5px rgba(255, 0, 170, 0.8));
+  border: 2px solid rgb(255, 0, 170);
+}
+
 footer {
   font-family: 'Roboto', sans-serif;
   font-size: 12px;
   text-align: center;
   padding: 20px 0;
   background-color: rgb(38, 28, 43);
-  color: rgb(169, 152, 177);
+  color: rgb(156, 139, 165);
 }
 
 /* Media query for small screens! */
@@ -318,9 +344,5 @@ footer {
     .winning-line {
       align-self: center;
       justify-self: center;
-    }
-
-    form {
-      margin-bottom: 5px;
     }
 }
