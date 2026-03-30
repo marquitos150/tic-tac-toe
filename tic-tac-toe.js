@@ -234,7 +234,7 @@ const DisplayController = (() => {
             gameConsole.textContent = "It's a tie. Good game!";
             // use default color
             gameConsole.classList.remove("player-O");
-            gameConsole.classList.remove("player_X");
+            gameConsole.classList.remove("player-X");
         }
     };
 
