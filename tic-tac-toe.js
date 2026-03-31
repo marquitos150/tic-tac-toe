@@ -250,31 +250,31 @@ const DisplayController = (() => {
         if (direction === "horizontal") {
             if (currGrid[0].every(symbol => symbol === 'O') ||
                 currGrid[0].every(symbol => symbol === 'X')) {
-                winningLine = createLine(20, 50, 320, 50);
+                winningLine = createLine(10, 50, 330, 50);
             } else if (currGrid[1].every(symbol => symbol === "O") ||
                 currGrid[1].every(symbol => symbol === 'X')) {
-                winningLine = createLine(20, 170, 320, 170);
+                winningLine = createLine(10, 170, 330, 170);
             } else {
-                winningLine = createLine(20, 290, 320, 290);
+                winningLine = createLine(10, 290, 330, 290);
             }
         } else if (direction === "vertical") {
             const currGridReversed = currGrid[0].map((_, col) => currGrid.map(row => row[col]));
             if (currGridReversed[0].every(symbol => symbol === 'O') ||
                 currGridReversed[0].every(symbol => symbol === 'X')) {
-                winningLine = createLine(50, 20, 50, 320);
+                winningLine = createLine(50, 10, 50, 330);
             } else if (currGridReversed[1].every(symbol => symbol === 'O') ||
                 currGridReversed[1].every(symbol => symbol === 'X')) {
-                winningLine = createLine(170, 20, 170, 320);
+                winningLine = createLine(170, 10, 170, 330);
             } else {
-                winningLine = createLine(290, 20, 290, 320);
+                winningLine = createLine(290, 10, 290, 330);
             }
         } else { // diagonal winning line
             const diagonal = [currGrid[0][0], currGrid[1][1], currGrid[2][2]];
             if (diagonal.every(symbol => symbol === 'O') ||
                 diagonal.every(symbol => symbol === 'X')) {
-                winningLine = createLine(20, 20, 320, 320);
+                winningLine = createLine(10, 10, 330, 330);
             } else {
-                winningLine = createLine(320, 20, 20, 320);
+                winningLine = createLine(330, 10, 10, 330);
             }
         }
 
