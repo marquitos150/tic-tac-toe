@@ -4,7 +4,7 @@ Welcome to Neon Tic-Tac-Toe! This is an interactive, browser-based version of th
 
 Rather than use constructors, I focused on utilizing factory functions, closures, and the module pattern to my JavaScript code. This helps me to manage game state through encapsulation, keeping variables like the game board grid and player information private while only exposing the necessary functions that can be used. This allows controllers for the game logic and display to interact cleanly without interfering with each other, which indicates more modular, maintainable code.
 
-[**Live Demo**](https://github.com/marquitos150/tic-tac-toe)
+[**Live Demo**](https://marquitos150.github.io/tic-tac-toe/)
 
 ## How it Works
 Upon opening the page, you will not be able to interact with the 3x3 grid. This is because the game hasn't started yet. To start the game, click the "Play" button! Optionally, you can type in the input fields the players' names.
