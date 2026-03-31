@@ -9,7 +9,8 @@ Rather than use constructors, I focused on utilizing factory functions, closures
 ## How it Works
 Upon opening the page, you will not be able to interact with the 3x3 grid. This is because the game hasn't started yet. To start the game, click the "Play" button! Optionally, you can type in the input fields the players' names.
 
-> **Note:** If a name is not provided in an input field, it will default to either "Player O" or "Player X" depending on which field was left empty.
+> [!NOTE] 
+> If a name is not provided in an input field, it will default to either "Player O" or "Player X" depending on which field was left empty.
 
 ![Initial display of tic-tac-toe app](assets/initial-display.png)
 
@@ -17,6 +18,7 @@ After clicking the "Play" button, the console box below it will display text ind
 
 Once the game is finished, the grid can no longer be played on, and the input fields and button are re-enabled. Depending on the outcome, the scoreboard will keep a tally on the number of wins for each player and ties. If you wish to play again, you would simply click the "Play" button again.
 
-> **Warning:** After the game ends, if you or your opponent change the names in the input fields and click "Play" again, the scoreboard will reset. This ensures that new players start with a fresh score, avoids confusion between new and existing players, and prevents existing players from starting at an advantage.
+> [!WARNING]
+> After the game ends, if you or your opponent change the names in the input fields and click "Play" again, the scoreboard will reset. This ensures that new players start with a fresh score, avoids confusion between new and existing players, and prevents existing players from starting at an advantage.
 
 ![Final outcome display of tic-tac-toe app](assets/final-outcome.png)
